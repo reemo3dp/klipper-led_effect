@@ -58,7 +58,7 @@ check_folders()
 link_extension()
 {
     echo -n "Linking extension to Klipper... "
-    ln -sf "${SRCDIR}/packages/led_effect" "${KLIPPER_PATH}/klippy/extras/led_effect"
+    ln -sf "${SRCDIR}/packages/led_effect/src/" "${KLIPPER_PATH}/klippy/extras/led_effect"
     echo "[OK]"
 }
 
@@ -133,15 +133,15 @@ verify_ready()
 }
 
 # Run steps
-verify_ready
-check_klipper
-check_folders
-stop_klipper
+#verify_ready
+#check_klipper
+#check_folders
+#stop_klipper
 if [ ! $UNINSTALL ]; then
     link_extension
-    add_updater
+#    add_updater
 else
     uninstall
 fi
-start_klipper
+#start_klipper
 
