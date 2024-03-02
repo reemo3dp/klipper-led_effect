@@ -9,13 +9,18 @@ MOONRAKER_CONFIG_DIR="${HOME}/printer_data/config"
 RESTART_SERVICE=1
 UPDATE_MOONRAKER=1
 IGNORE_ROOT=0
+VENV_PATH="${HOME}/klippy-env"
 
 
 
 
 usage(){ echo "Usage: $0 [-k <klipper path>] [-c <moonraker config path>] [-s klipper-service-name]" 1>&2; exit 1; }
 
+<<<<<<< HEAD
 args=$(getopt -a -o k:c:s:uh --long klipper:,moonraker:,klipper-service-name:,uninstall,help,no-moonraker,no-service,ignore-root -- "$@")
+=======
+args=$(getopt -a -o k:c:uh --long klipper:,moonraker:,uninstall,help,no-moonraker,no-service,ignore-root,venv: -- "$@")
+>>>>>>> 3067f5b (Still broken)
 # shellcheck disable=SC2181
 if [[ $? -gt 0 ]]; then
     usage
@@ -36,6 +41,11 @@ while :; do
     -c | --moonraker)
         shift
         MOONRAKER_CONFIG_DIR=$1
+        shift
+        ;;
+    --venv)
+        shift
+        VENV_PATH=$1
         shift
         ;;
     --no-moonraker)
@@ -107,9 +117,17 @@ check_folders()
 link_extension()
 {
     echo -n "Linking extension to Klipper... "
-    ln -sf "${SRCDIR}/packages/led_effect/src/" "${KLIPPER_PATH}/klippy/extras/led_effect"
+    ln -sf "${SRCDIR}/packages/led_effect/src/led_effect/" "${KLIPPER_PATH}/klippy/extras/led_effect"
     echo "[OK]"
 }
+
+install_requirements() 
+(
+    echo -n "Installing requirements... "
+    source "${VENV_PATH}/bin/activate"
+    pip install -r "${SRCDIR}/packages/led_effect/requirements.txt"
+    echo "[OK]"
+)
 
 # Restart moonraker
 restart_moonraker()
@@ -188,6 +206,7 @@ check_folders
 [ $RESTART_SERVICE -eq 1 ] && stop_klipper
 if [ ! $UNINSTALL ]; then
    link_extension
+   install_requirements
    [ $UPDATE_MOONRAKER -eq 1 ] && add_updater
 else
     uninstall
