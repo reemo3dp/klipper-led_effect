@@ -117,7 +117,7 @@ check_folders()
 link_extension()
 {
     echo -n "Linking extension to Klipper... "
-    ln -sf "${SRCDIR}/packages/led_effect/led_effect/led_effect_plugin.py" "${KLIPPER_PATH}/klippy/extras/led_effect.py"
+    ln -sf "${SRCDIR}/packages/led_effect/led_effect/" "${KLIPPER_PATH}/klippy/extras/led_effect"
     echo "[OK]"
 }
 
@@ -172,13 +172,13 @@ stop_klipper()
 
 uninstall()
 {
-    if [ -f "${KLIPPER_PATH}/klippy/extras/led_effect.py" ]; then
+    if [ -d "${KLIPPER_PATH}/klippy/extras/led_effect" ]; then
         echo -n "Uninstalling... "
-        rm -f "${KLIPPER_PATH}/klippy/extras/led_effect.py"
+        rm -f "${KLIPPER_PATH}/klippy/extras/led_effect"
         echo "[OK]"
         echo "You can now remove the [update_manager led_effect] section in your moonraker.conf and delete this directory. Also remove all led_effect configurations from your Klipper configuration."
     else
-        echo "led_effect.py not found in \"${KLIPPER_PATH}/klippy/extras/\". Is it installed?"
+        echo "led_effect not found in \"${KLIPPER_PATH}/klippy/extras/\". Is it installed?"
         echo "[FAILED]"
     fi
 }
