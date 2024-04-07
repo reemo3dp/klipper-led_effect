@@ -1,0 +1,23 @@
+name: "Rebase upstream-develop ontop upstream/develop"
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+jobs:
+  rebase:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: upstream-develop
+    - name: Try rebase
+      run: |
+        set -euxo pipefail
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "githubactions@github.com"
+
+        git remote add upstream https://github.com/julianschill/klipper-led_effect.git
+        git fetch upstream
+        git rebase upstream/develop
+        git push origin HEAD:upstream-develop --force-with-lease
