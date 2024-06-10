@@ -16,11 +16,7 @@ VENV_PATH="${HOME}/klippy-env"
 
 usage(){ echo "Usage: $0 [-k <klipper path>] [-c <moonraker config path>] [-s klipper-service-name]" 1>&2; exit 1; }
 
-<<<<<<< HEAD
-args=$(getopt -a -o k:c:s:uh --long klipper:,moonraker:,klipper-service-name:,uninstall,help,no-moonraker,no-service,ignore-root -- "$@")
-=======
-args=$(getopt -a -o k:c:uh --long klipper:,moonraker:,uninstall,help,no-moonraker,no-service,ignore-root,venv: -- "$@")
->>>>>>> 3067f5b (Still broken)
+args=$(getopt -a -o k:c:s:uh --long klipper:,moonraker:,klipper-service-name:,uninstall,help,no-moonraker,no-service,ignore-root,venv: -- "$@")
 # shellcheck disable=SC2181
 if [[ $? -gt 0 ]]; then
     usage
