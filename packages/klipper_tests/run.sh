@@ -35,6 +35,7 @@ run() {
             continue;
         fi
 
+        docker-compose exec -T klipper bash -c 'cat printer_data/logs/klippy.log'
         if [[ "$INFO" =~ \"state\":\ *\"ready\" ]]; then
             exit 0
         fi

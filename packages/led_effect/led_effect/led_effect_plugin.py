@@ -164,9 +164,6 @@ class ledFrameHandler:
             self.heaterCurrent[heater] = 0
             self.heaterTarget[heater]  = 0
 
-            if not self.heaterTimer:
-                self.heaterTimer = self.reactor.register_timer(self._pollHeater,
-                                                               self.reactor.NOW)
 
         if effect.stepper:
             self.toolhead = self.printer.lookup_object('toolhead')
@@ -326,16 +323,16 @@ class ledEffect:
         self.config       = config
         self.printer      = config.get_printer()
         self.gcode        = self.printer.lookup_object('gcode')
-        self.gcode_macro  = self.printer.lookup_object('gcode_macro')
+        self.gcode_macro  = self.printer.load_object(config, 'gcode_macro')
         self.handler      = self.printer.load_object(config, 'led_effect')
         self.frameRate    = 1.0 / config.getfloat('frame_rate', 
                                         default=24, minval=1, maxval=60)
         self.enabled      = False
-        self.isDisabling  = False
         self.iteration    = 0
         self.layers       = []
         self.analogValue  = 0
-        self.fadeValue    = 1.0
+        self.button_state = 0
+        self.fadeValue    = 0.0
         self.fadeTime     = 0.0
         self.fadeEndTime  = 0
 
@@ -365,6 +362,7 @@ class ledEffect:
         self.runOnShutown = config.getboolean('run_on_error', False)
         self.heater       = config.get('heater', None)
         self.analogPin    = config.get('analog_pin', None)
+        self.buttonPins   = config.getlist('button_pins', None)
         self.stepper      = config.get('stepper', None)
         self.recalculate  = config.get('recalculate', False)
         self.endstops     = [x.strip() for x in config.get('endstops','').split(',')]
@@ -381,10 +379,14 @@ class ledEffect:
         if self.analogPin:
             ppins = self.printer.lookup_object('pins')
             self.mcu_adc = ppins.setup_pin('adc', self.analogPin)
-            self.mcu_adc.setup_minmax(ANALOG_SAMPLE_TIME, ANALOG_SAMPLE_COUNT)
+            self.mcu_adc.setup_adc_sample(ANALOG_SAMPLE_TIME, ANALOG_SAMPLE_COUNT)
             self.mcu_adc.setup_adc_callback(ANALOG_REPORT_TIME, self.adcCallback)
             query_adc = self.printer.load_object(self.config, 'query_adc')
             query_adc.register_adc(self.name, self.mcu_adc)
+
+        if self.buttonPins:
+            buttons = self.printer.load_object(config, "buttons")
+            buttons.register_buttons(self.buttonPins, self.button_callback)
 
     cmd_SET_LED_help = 'Starts or Stops the specified led_effect'
 
@@ -393,6 +395,8 @@ class ledEffect:
         self.ledChains    = []
         self.leds         = []
         self.enabled = self.autoStart
+        if not self.enabled:
+            self.nextEventTime = self.handler.reactor.NEVER
         self.printer.register_event_handler('klippy:shutdown', 
                                     self._handle_shutdown)
         #map each LED from the chains to the "pixels" in the effect frame
@@ -479,14 +483,10 @@ class ledEffect:
         self.handler.addEffect(self)
 
     def getFrame(self, eventtime):
-        if not self.enabled and not self.isDisabling:
-            return self.frame, False
-        
         if not self.enabled and self.fadeValue <= 0.0:
             if self.nextEventTime < self.handler.reactor.NEVER:
                 # Effect has just been disabled. Set colors to 0 and update once.
                 self.nextEventTime = self.handler.reactor.NEVER
-                self.isDisabling = False
                 self.frame = [0.0] * COLORS * self.ledCount
                 update = True
             else:
@@ -516,7 +516,6 @@ class ledEffect:
     def set_enabled(self, state):
         if self.enabled != state:
             self.enabled = state
-            self.isDisabling = not state
             self.nextEventTime = self.handler.reactor.NOW
             self.handler._getFrames(self.handler.reactor.NOW)
     
@@ -562,6 +561,9 @@ class ledEffect:
 
     def adcCallback(self, read_time, read_value):
         self.analogValue = int(read_value * 1000.0) / 10.0
+    
+    def button_callback(self, eventtime, state):
+        self.button_state = state
 
     ######################################################################
     # LED Effect layers
@@ -953,6 +955,10 @@ class ledEffect:
             self.disableOnceReached = kwargs["disableOnceReached"] if "disableOnceReached" in kwargs else kwargs["effectCutoff"]
             self.heater = kwargs["heater"] if "heater" in kwargs else self.handler.heater
             self.gradientSteps = int(kwargs["gradientSteps"]) if "gradientSteps" in kwargs else 200
+
+            if self.heater is None:
+                raise self.handler.printer.config_error(
+                    "LED Effect '%s' has no heater defined." % (self.handler.name))
 
             if len(self.paletteColors) == 1:
                 self.paletteColors += self.paletteColors
