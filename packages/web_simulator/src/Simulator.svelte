@@ -198,7 +198,7 @@
 
 <svelte:head>
     <script
-        src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"
+        src="https://cdn.jsdelivr.net/pyodide/v0.29.4/full/pyodide.js"
         on:load={init}
     ></script>
 </svelte:head>
