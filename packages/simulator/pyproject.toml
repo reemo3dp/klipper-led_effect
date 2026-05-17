@@ -7,14 +7,13 @@ authors = ["Julian Schill <j.schill@web.de>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "<3.12,>=3.8"
-wxPython = "^4.2.0"
-pyinstaller = "^6.0.0"
-numpy = ">1.22"
+wxPython = ">=4.2.5"
+pyinstaller = ">6.4.0"
+numpy = ">2"
 klippermock = {path = "../klippermock", develop = true}
 
 [tool.poetry.group.dev.dependencies]
-black = {version = "^24.0.0", allow-prereleases = true}
+black = {version = ">=26.3.1", allow-prereleases = true}
 
 [build-system]
 requires = ["poetry-core"]

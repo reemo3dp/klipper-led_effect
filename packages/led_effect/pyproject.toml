@@ -5,7 +5,8 @@ authors = ["Julian Schill <j.schill@web.de>"]
 description = ""
 
 [tool.poetry.dependencies]
-python = "<3.12,>=3.8"
+python = ">3.12,<4.0"
+numpy = "^2.4.5"
 
 [tool.poetry.group.dev.dependencies]
 lark = "^1.1.9"

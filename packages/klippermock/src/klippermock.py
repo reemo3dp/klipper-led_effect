@@ -134,3 +134,5 @@ class mockLedHelper:
     def update_func(self, led_state, print_time):
         self.led_state = led_state
 
+    def _check_transmit(self, print_time=None):
+        None

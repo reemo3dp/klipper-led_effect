@@ -191,15 +191,9 @@ Sets the frame rate in frames per second for the effect
 `recalculate: true`  
 Enable layer template recalculation on effect activation.
 
-<<<<<<< HEAD
-heater:
-Specifies the heater to use for a heater effect. Use `extruder` for the
-extruder and `heater_bed` for the bed. For temperature fans or sensors add the
-=======
 `heater: heater_bed`  
 Specifies the default heater to use for a heater effect. Use `extruder` for the
 extruder and `heater_bed` for the bed. For temperature fans or  sensors add the
->>>>>>> 5fcca98 (chore(docs): Render examples)
 type and use quotes.
 Example: `heater: "temperature_fan myfan"`
 
@@ -209,22 +203,12 @@ Example: `analog_pin: PA1`
 
 `stepper: x`  
 Specifies the axis to use for the stepper effect. Possible values are:
-<<<<<<< HEAD
-`x`, `y` and `z`. 
-Example: `stepper: x`
-=======
 `x`, `y` and `z`.
->>>>>>> 5fcca98 (chore(docs): Render examples)
 
 `endstops: x, y`  
 Specifies the endstops the homing effect triggers on. Multiple endstops can be
-<<<<<<< HEAD
-specified as a comma seperated list. Possible values are: `x`, `y`, `z` and `probe`.
-Example: `endstops: x, y`
-=======
 specified as a comma seprated list. Possible values are: `x`, `y`, `z` and `probe`.
 
->>>>>>> 5fcca98 (chore(docs): Render examples)
 
 button_pins:
 Specifies the pins the button effect trigger on. Multiple pins can be specified
