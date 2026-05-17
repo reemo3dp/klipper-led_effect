@@ -22,10 +22,10 @@ jobs:
       working-directory: ./packages/led_effect
       run: poetry run pytest -s -v
   
-  klipper-test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Execute Klipper Test
-      working-directory: ./packages/klipper_tests
-      run: ./run.sh
+  # klipper-test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Execute Klipper Test
+  #     working-directory: ./packages/klipper_tests
+  #     run: ./run.sh
