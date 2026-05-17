@@ -109,7 +109,7 @@ name = "klippermock"
 version = "0.1.0"
 description = ""
 optional = false
-python-versions = ">=3.12,<4.0"
+python-versions = ">=3.12,<3.15"
 groups = ["dev"]
 files = []
 develop = true
@@ -418,5 +418,5 @@ test = ["django (<2) ; python_version < \"3\"", "django ; python_version >= \"3\
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.12,<4.0"
-content-hash = "a7c8ab5fe7d0b3baccb3e782d55b3b7a900f40ca5c6e1efe47d3b9c1a7d4463e"
+python-versions = ">=3.12,<3.15"
+content-hash = "5b9e63e8a252dbd7f0a65309318065529204d4b1e579a6294e49c62daffa9cb3"
