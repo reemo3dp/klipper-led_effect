@@ -14,7 +14,7 @@
     "build:whl:led_effect": "rm src/led_effect*.whl || true; cd ../led_effect; poetry build -f wheel -o ../web_simulator/src"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tsconfig/svelte": "^5.0.2",
     "npm-run-all2": "^9.0.0",
     "svelte": "^5.0.0",
